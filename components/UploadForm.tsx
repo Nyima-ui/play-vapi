@@ -2,7 +2,11 @@
 import { useRef, useState } from "react";
 import { parsePdf } from "@/lib/utils";
 import { upload } from "@vercel/blob/client";
-import { UploadBookPdf, UploadBookSegments } from "@/action/BookUpload.action";
+import {
+  updateTotalSegments,
+  UploadBookPdf,
+  UploadBookSegments,
+} from "@/action/BookUpload.action";
 
 const UploadForm = () => {
   const [loading, setLoading] = useState(false);
@@ -56,12 +60,13 @@ const UploadForm = () => {
       // SAVE THE SEGMENTS
       const data = await UploadBookSegments(result.data._id, parsedPdf.content);
 
-      if (!data.success) {
+      if (!data.success || data.totalSegments === undefined) {
         console.error("Failed to upload segments:", data.error);
         throw new Error("Failed to save book segments");
       }
 
       console.log("Successfully uploaded", data.totalSegments, "segments");
+      await updateTotalSegments(result.data._id, data.totalSegments);
     } catch (e) {
       console.error(`Error uploading book ${e}`);
     } finally {
@@ -110,7 +115,6 @@ const UploadForm = () => {
         )}
         Submit
       </button>
-      
     </form>
   );
 };

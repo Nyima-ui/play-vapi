@@ -117,10 +117,7 @@ export const UploadBookSegments = async (
         chunk.map((s) => s.text),
       );
 
-      if (!embeddings) {
-        throw new Error("Failed to get embeddings");
-      }
-
+      // embeddings function now throws on error, so no need to check for undefined
       await BookSegment.insertMany(
         chunk.map((segment, j) => ({
           bookId,
@@ -146,6 +143,23 @@ export const UploadBookSegments = async (
     return {
       success: false,
       error: errorMessage,
+    };
+  }
+};
+
+export const updateTotalSegments = async (
+  bookId: string,
+  totalSegments: number,
+) => {
+  try {
+    await connectToMongoDB();
+
+    await BookUpload.findByIdAndUpdate(bookId, { $set: { totalSegments } });
+  } catch (e) {
+    console.error(`Error updating total segments of book document`, e);
+    return {
+      success: false,
+      error: e,
     };
   }
 };

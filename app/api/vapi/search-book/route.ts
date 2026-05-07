@@ -1,8 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export const GET = async () => {
-  return NextResponse.json({
-    success: true,
-    message: "api running peacefully",
-  });
+export const POST = async (request: NextRequest) => {
+  try {
+  } catch (e) {
+    console.error(`VAPI search error`, e);
+    return NextResponse.json({
+      results: [{ result: "Error processsing request." }],
+    });
+  }
 };

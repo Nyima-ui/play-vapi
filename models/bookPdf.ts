@@ -6,6 +6,7 @@ const BookUploadSchema = new Schema(
     author: { type: String, required: true },
     pdfUrl: { type: String, required: true },
     coverUrl: { type: String },
+    totalSegments: { type: Number, default: 0 },
   },
   { timestamps: true },
 );
