@@ -2,6 +2,7 @@
 import {
   getBatchEmbeddings,
   getBatchEmbeddingsWithNomic,
+  getBatchEmbeddingsWithNomicAPI,
   getEmbedding,
 } from "@/lib/getEmbeddings";
 import connectToMongoDB from "@/lib/mongoose";
@@ -101,7 +102,7 @@ export const UploadBookSegments = async (
         `Batch ${i + 1}/${chunks.length} - embedding ${chunk.length} segments.`,
       );
 
-      const embeddings = await getBatchEmbeddingsWithNomic(
+      const embeddings = await getBatchEmbeddingsWithNomicAPI(
         chunk.map((s) => s.text),
       );
 
