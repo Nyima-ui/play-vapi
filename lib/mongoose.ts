@@ -24,6 +24,9 @@ const connectToMongoDB = async () => {
     cached.promise = mongoose.connect(MONGODB_URI, {
       dbName: "play-vapi",
       bufferCommands: false,
+      serverSelectionTimeoutMS: 10000, // 10 seconds
+      socketTimeoutMS: 45000, // 45 seconds
+      connectTimeoutMS: 10000, // 10 seconds
     });
   }
 
@@ -31,8 +34,9 @@ const connectToMongoDB = async () => {
     cached.conn = await cached.promise;
   } catch (error) {
     cached.promise = null;
-    console.log("MONGODB connection error:", error);
-    throw error;
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.log("MONGODB connection error:", errorMessage);
+    throw new Error(`Failed to connect to MongoDB: ${errorMessage}`);
   }
 
   console.log("Connected to MongoDB");

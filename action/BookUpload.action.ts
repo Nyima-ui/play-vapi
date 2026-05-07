@@ -20,15 +20,22 @@ export const UploadBookPdf = async (payload: BookUploadPayload) => {
       coverUrl: payload.coverUrl,
     });
 
+    // VALIDATE THAT BOOK WAS CREATED WITH AN ID
+    if (!book || !book._id) {
+      throw new Error("Book created but missing _id");
+    }
+
+    const bookData = book.toObject();
     return {
       success: true,
-      data: { ...book.toObject(), _id: book._id.toString() },
+      data: { ...bookData, _id: book._id.toString() },
     };
   } catch (e) {
-    console.error("Error uploading pdf of the book", e);
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    console.error("Error uploading pdf of the book:", errorMessage, e);
     return {
       success: false,
-      error: e,
+      error: errorMessage,
     };
   }
 };
@@ -87,6 +94,10 @@ export const UploadBookSegments = async (
   try {
     await connectToMongoDB();
 
+    if (!bookId) {
+      throw new Error("bookId is required");
+    }
+
     const chunks: Segment[][] = [];
     for (let i = 0; i < segments.length; i += BATCH_SIZE) {
       chunks.push(segments.slice(i, i + BATCH_SIZE));
@@ -130,10 +141,11 @@ export const UploadBookSegments = async (
       totalSegments: segments.length,
     };
   } catch (e) {
-    console.error("Error uploading pdf segments", e);
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    console.error("Error uploading pdf segments:", errorMessage, e);
     return {
       success: false,
-      error: e,
+      error: errorMessage,
     };
   }
 };

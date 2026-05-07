@@ -47,6 +47,12 @@ const UploadForm = () => {
         coverUrl,
       });
 
+      // CHECK IF PDF UPLOAD WAS SUCCESSFUL
+      if (!result.success || !result.data?._id) {
+        console.error("Failed to upload book PDF:", result.error);
+        throw new Error("Failed to save book to database");
+      }
+
       // SAVE THE SEGMENTS
       const data = await UploadBookSegments(result.data._id, parsedPdf.content);
 
