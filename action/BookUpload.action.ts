@@ -1,5 +1,9 @@
 "use server";
-import { getBatchEmbeddings, getEmbedding } from "@/lib/getEmbeddings";
+import {
+  getBatchEmbeddings,
+  getBatchEmbeddingsWithNomic,
+  getEmbedding,
+} from "@/lib/getEmbeddings";
 import connectToMongoDB from "@/lib/mongoose";
 import BookUpload from "@/models/bookPdf";
 import BookSegment from "@/models/bookSegment";
@@ -52,6 +56,26 @@ export const getEmbeddingWithRetry = async (
   throw new Error("Uncreachable");
 };
 
+export const getEmbeddingWithNomic = async (text: string) => {
+  try {
+    const response = await fetch("http://localhost:11434/api/embeddings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "nomic-embed-text",
+        prompt: text,
+      }),
+    });
+
+    const data = await response.json();
+    const embedding = data.embedding;
+
+    return embedding;
+  } catch (e) {
+    console.error(`Error embedding using nomic ollama model`, e);
+  }
+};
+
 const BATCH_SIZE = 20;
 const BATCH_DELAY_MS = 1000;
 
@@ -77,7 +101,13 @@ export const UploadBookSegments = async (
         `Batch ${i + 1}/${chunks.length} - embedding ${chunk.length} segments.`,
       );
 
-      const embeddings = await getBatchEmbeddings(chunk.map((s) => s.text));
+      const embeddings = await getBatchEmbeddingsWithNomic(
+        chunk.map((s) => s.text),
+      );
+
+      if (!embeddings) {
+        throw new Error("Failed to get embeddings");
+      }
 
       await BookSegment.insertMany(
         chunk.map((segment, j) => ({
