@@ -163,3 +163,27 @@ export const updateTotalSegments = async (
     };
   }
 };
+
+export const fetchBooks = async () => {
+  try {
+    await connectToMongoDB();
+
+    const data = await BookUpload.find().lean();
+
+    const books = data.map((book) => ({
+      ...book,
+      _id: book._id.toString(),
+    }));
+
+    return {
+      success: true,
+      data: books,
+    };
+  } catch (e) {
+    console.error(`Error fetching uploaded book`, e);
+    return {
+      success: false,
+      error: e,
+    };
+  }
+};

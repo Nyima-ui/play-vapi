@@ -5,8 +5,12 @@ const ASSISTANT_ID = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_KEY!;
 
 const vapi = new Vapi(VAPI_API_KEY);
 
-export const start = async () => {
-  vapi.start(ASSISTANT_ID);
+export const start = async (bookId: string) => {
+  vapi.start(ASSISTANT_ID, {
+    variableValues: {
+      bookId,
+    },
+  });
 };
 
 export const stop = async () => {
