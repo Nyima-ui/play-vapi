@@ -187,3 +187,23 @@ export const fetchBooks = async () => {
     };
   }
 };
+
+export const fetchBookById = async (bookId: string) => {
+  try {
+    await connectToMongoDB();
+
+    const book = await BookUpload.findOne({ _id: bookId }).lean();
+
+    return {
+      success: true,
+      data: { ...book, _id: book._id.toString() },
+    };
+    
+  } catch (e) {
+    console.error(`Error fetching book using id`, e);
+    return {
+      success: false,
+      error: e,
+    };
+  }
+};

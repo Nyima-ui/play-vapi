@@ -5,12 +5,16 @@ const ASSISTANT_ID = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_KEY!;
 
 const vapi = new Vapi(VAPI_API_KEY);
 
-export const start = async (bookId: string) => {
-  console.log("bookId", bookId);
+export const start = async (
+  bookId: string,
+  bookTitle: string,
+  bookAuthor: string,
+) => {
   vapi.start(ASSISTANT_ID, {
     variableValues: {
       bookId: bookId,
     },
+    firstMessage: `Hi! I'am your reading buddy. What would you like to discuss about ${bookTitle} by ${bookAuthor}`,
   });
 };
 
