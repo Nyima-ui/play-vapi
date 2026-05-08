@@ -1,13 +1,12 @@
 "use server";
 import {
-  getBatchEmbeddings,
-  getBatchEmbeddingsWithNomic,
   getBatchEmbeddingsWithNomicAPI,
   getEmbedding,
 } from "@/lib/getEmbeddings";
 import connectToMongoDB from "@/lib/mongoose";
 import BookUpload from "@/models/bookPdf";
 import BookSegment from "@/models/bookSegment";
+import { unstable_noStore as noStore } from "next/cache";
 
 export const UploadBookPdf = async (payload: BookUploadPayload) => {
   try {
@@ -165,6 +164,7 @@ export const updateTotalSegments = async (
 };
 
 export const fetchBooks = async () => {
+  noStore();
   try {
     await connectToMongoDB();
 
