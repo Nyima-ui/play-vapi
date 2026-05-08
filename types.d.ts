@@ -10,3 +10,22 @@ interface Segment {
   segmentIndex: number;
   wordCount: number;
 }
+
+interface UploadedBook extends BookUploadPayload {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  totalSegments: number;
+}
+
+interface VapiMessage {
+  type: string;
+  role: string;
+  transcriptType: string;
+  transcript: string;
+}
+
+interface Messages {
+  role: string;
+  text: string;
+}
