@@ -50,7 +50,7 @@ export const POST = async (request: NextRequest) => {
           ? JSON.parse(func.arguments)
           : func.arguments;
 
-      if ((func.name = "searchBook")) {
+      if (func.name === "searchBook") {
         const text = await searchWithVectors(args.bookId, args.query);
         results.push({
           toolCallId: id,
@@ -58,6 +58,8 @@ export const POST = async (request: NextRequest) => {
         });
       }
     }
+
+    return NextResponse.json({ results });
   } catch (e) {
     console.error(`VAPI search error`, e);
     return NextResponse.json({
