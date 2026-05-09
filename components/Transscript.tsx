@@ -1,19 +1,4 @@
-import React from "react";
 
-const seedMessages = [
-  {
-    role: "assistant",
-    text: "Hi. I'm your reading buddy. What would you like to discuss about Keep Going?",
-  },
-  {
-    role: "user",
-    text: "Okay. So who, uh, what is the theme of the book?",
-  },
-  {
-    role: "assistant",
-    text: "The theme of Keep Going by Austin Cleon centers around sustaining creativity and productivity in everyday life. It emphasizes the importance of routine, saying no to distractions, and staying focused on creative work despite challenges and fluctuations in inspiration.",
-  },
-];
 
 interface TransscriptProps {
   messages: Messages[];

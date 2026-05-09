@@ -24,8 +24,7 @@ const searchWithVectors = async (bookId: string, query: string) => {
       $project: { text: 1, score: { $meta: "vectorSearchScore" } },
     },
   ]);
-
-  console.log(results);
+  
   return results.map((r: { text: string }) => r.text).join("\n\n");
 };
 
