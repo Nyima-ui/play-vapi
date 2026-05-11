@@ -3,6 +3,7 @@ interface BookUploadPayload {
   author: string;
   pdfUrl: string;
   coverUrl: string;
+  persona: string; 
 }
 
 interface Segment {
@@ -28,4 +29,10 @@ interface VapiMessage {
 interface Messages {
   role: string;
   text: string;
+}
+
+interface VoiceOptions {
+  id: string;
+  name: string;
+  description: string;
 }

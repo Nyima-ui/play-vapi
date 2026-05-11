@@ -17,6 +17,7 @@ export const UploadBookPdf = async (payload: BookUploadPayload) => {
       author: payload.author,
       pdfUrl: payload.pdfUrl,
       coverUrl: payload.coverUrl,
+      persona: payload.persona
     });
 
     // VALIDATE THAT BOOK WAS CREATED WITH AN ID

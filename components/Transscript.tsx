@@ -1,5 +1,3 @@
-
-
 interface TransscriptProps {
   messages: Messages[];
   currentUserMessage: string;
@@ -18,15 +16,20 @@ const Transscript = ({
           key={idx}
           className={`${msg.role === "assistant" ? "" : "bg-gray-800 px-5 py-2.5 rounded-md self-end"} mt-5 max-w-lg`}
         >
+          <span className="text-red-500">final message</span>
           {msg.text}
         </p>
       ))}
 
       {currentAssistantMessage && (
-        <p className="mt-5 max-w-lg">{currentAssistantMessage}</p>
+        <p className="mt-5 max-w-lg">
+          <span className="text-red-500">partial assistant message</span>
+          {currentAssistantMessage}
+        </p>
       )}
       {currentUserMessage && (
         <p className="bg-gray-800 px-5 py-2.5 rounded-md self-end mt-5 max-w-lg">
+          <span className="text-red-500">partial user message</span>
           {currentUserMessage}
         </p>
       )}

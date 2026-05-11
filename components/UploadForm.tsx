@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import { parsePdf } from "@/lib/utils";
 import { upload } from "@vercel/blob/client";
+import { voiceOptions } from "@/lib/constants";
 import {
   updateTotalSegments,
   UploadBookPdf,
@@ -23,6 +24,7 @@ const UploadForm = () => {
         .toLowerCase();
       const author = formData.get("author") as string;
       const pdfFile = formData.get("pdf-file") as File;
+      const persona = formData.get("voice") as string;
 
       // PARSE PDF
       const parsedPdf = await parsePdf(pdfFile);
@@ -49,6 +51,7 @@ const UploadForm = () => {
         author,
         pdfUrl,
         coverUrl,
+        persona,
       });
 
       // CHECK IF PDF UPLOAD WAS SUCCESSFUL
@@ -107,6 +110,25 @@ const UploadForm = () => {
           className="border"
           required
         />
+      </div>
+
+      <div className="px-5 mt-5">
+        <label htmlFor="voice-dave">Choose a voice</label>
+
+        {Object.entries(voiceOptions).map(([key, value]) => (
+          <div key={key} className="px-3">
+            <input
+              type="radio"
+              name="voice"
+              value={key}
+              id={`voice-${key}`}
+              required
+            />
+            <label htmlFor={`voice-${key}`} className="cursor-pointer">
+              {value.name} - {value.description}
+            </label>
+          </div>
+        ))}
       </div>
 
       <button type="submit" className="border m-5 px-5 py-2 rounded-md">
